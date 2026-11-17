@@ -150,7 +150,7 @@ public class EmployeeManager {
     private static String[] readEmployees() {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
-                    new FileInputStream("employees.txt")
+                    new FileInputStream(Constants.EMPLOYEE_FILE)
                 ))) {
 
             String employeeLine = reader.readLine();
@@ -170,7 +170,7 @@ public class EmployeeManager {
     // Writes employee names to the file.
     private static boolean writeEmployees(String[] employeeNames) {
         try (BufferedWriter writer = new BufferedWriter(
-                new FileWriter("employees.txt"))) {
+                new FileWriter(Constants.EMPLOYEE_FILE))) {
 
             writer.write(String.join(",", employeeNames));
             return true;
@@ -184,7 +184,7 @@ public class EmployeeManager {
     // Adds a new employee name at the end of the file.
     private static boolean appendEmployee(String employeeName) {
         try (BufferedWriter writer = new BufferedWriter(
-                new FileWriter("employees.txt", true))) {
+                new FileWriter(Constants.EMPLOYEE_FILE, true))) {
 
             writer.write(", " + employeeName);
             return true;
