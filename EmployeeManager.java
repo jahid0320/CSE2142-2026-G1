@@ -1,6 +1,4 @@
 
-// File Name: EmployeeManager.java
-
 import java.io.*;
 import java.util.*;
 
@@ -14,113 +12,81 @@ public class EmployeeManager {
             return;
         }
 
-        // Check arguments
-        if (commandLineArguments[0].equals("l")) {
+        String command = commandLineArguments[0];
+
+        if (command.equals("l")) {
             System.out.println("Loading data ...");
 
-            try {
-                BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(
-                        new FileInputStream("employees.txt")
-                    )
-                );
+            String[] employeeNames = readEmployees();
 
-                String employeeLine = reader.readLine();
-                String employeeNames[] = employeeLine.split(",");
-
+            if (employeeNames != null) {
                 for (String employeeName : employeeNames) {
                     System.out.println(employeeName);
                 }
-
-            } catch (Exception e) {
             }
 
             System.out.println("Data Loaded.");
 
-        } else if (commandLineArguments[0].equals("s")) {
+        } else if (command.equals("s")) {
             System.out.println("Loading data ...");
 
-            try {
-                BufferedReader r = new BufferedReader(
-                    new InputStreamReader(
-                        new FileInputStream("employees.txt")
-                    )
-                );
+            String[] employeeNames = readEmployees();
 
-                String l = r.readLine();
-                System.out.println(l);
+            if (employeeNames != null && employeeNames.length > 0) {
+                System.out.println(String.join(",", employeeNames));
 
-                String e[] = l.split(",");
-                Random randomgenerator = new Random();
-                int randomIndex = randomgenerator.nextInt(e.length);
+                Random randomGenerator = new Random();
+                int randomIndex = randomGenerator.nextInt(employeeNames.length);
 
-                System.out.println(e[randomIndex]);
-
-            } catch (Exception e) {
+                System.out.println(employeeNames[randomIndex]);
             }
 
             System.out.println("Data Loaded.");
 
-        } else if (commandLineArguments[0].contains("+")) {
+        } else if (command.contains("+")) {
             System.out.println("Loading data ...");
 
-            try {
-                BufferedWriter writer = new BufferedWriter(
-                    new FileWriter("employees.txt", true)
-                );
+            String newEmployeeName = command.substring(1);
 
-                String n = commandLineArguments[0].substring(1);
-                writer.write(", " + n);
-                writer.close();
-
-            } catch (Exception e) {
+            if (appendEmployee(newEmployeeName)) {
+                System.out.println("Employee Added.");
             }
 
             System.out.println("Data Loaded.");
 
-        } else if (commandLineArguments[0].contains("?")) {
+        } else if (command.contains("?")) {
             System.out.println("Loading data ...");
 
-            try {
-                BufferedReader r = new BufferedReader(
-                    new InputStreamReader(
-                        new FileInputStream("employees.txt")
-                    )
-                );
+            String[] employeeNames = readEmployees();
 
-                String l = r.readLine();
-                String e[] = l.split(",");
+            if (employeeNames != null) {
+                String searchName = command.substring(1);
                 boolean found = false;
-                String searchName = commandLineArguments[0].substring(1);
 
-                for (int employeeIndex = 0; employeeIndex < e.length && !found; employeeIndex++) {
-                    if (e[employeeIndex].equals(searchName)) {
+                for (String employeeName : employeeNames) {
+                    if (employeeName.equals(searchName)) {
                         System.out.println("Employee found!");
                         found = true;
+                        break;
                     }
                 }
-
-            } catch (Exception e) {
             }
 
             System.out.println("Data Loaded.");
 
-        } else if (commandLineArguments[0].contains("c")) {
+        } else if (command.contains("c")) {
             System.out.println("Loading data ...");
 
-            try {
-                BufferedReader r = new BufferedReader(
-                    new InputStreamReader(
-                        new FileInputStream("employees.txt")
-                    )
-                );
+            String[] employeeNames = readEmployees();
 
-                String l = r.readLine();
-                char[] chars = l.toCharArray();
+            if (employeeNames != null) {
+                String employeeLine = String.join(",", employeeNames);
+                char[] characters = employeeLine.toCharArray();
+
                 boolean inWord = false;
                 int count = 0;
 
-                for (char character : chars) {
+                for (char character : characters) {
                     if (character == ' ') {
                         if (!inWord) {
                             count++;
@@ -132,74 +98,100 @@ public class EmployeeManager {
                 }
 
                 System.out.println(
-                    count + " word(s) found " + chars.length
+                    count + " word(s) found " + characters.length
                 );
-
-            } catch (Exception e) {
             }
 
             System.out.println("Data Loaded.");
 
-        } else if (commandLineArguments[0].contains("u")) {
+        } else if (command.contains("u")) {
             System.out.println("Loading data ...");
 
-            try {
-                BufferedReader r = new BufferedReader(
-                    new InputStreamReader(
-                        new FileInputStream("employees.txt")
-                    )
-                );
+            String[] employeeNames = readEmployees();
 
-                String l = r.readLine();
-                String e[] = l.split(",");
-                String employeeName = commandLineArguments[0].substring(1);
+            if (employeeNames != null) {
+                String targetEmployeeName = command.substring(1);
 
-                for (int i = 0; i < e.length; i++) {
-                    if (e[i].equals(employeeName)) {
-                        e[i] = "Updated";
+                for (int employeeIndex = 0;
+                     employeeIndex < employeeNames.length;
+                     employeeIndex++) {
+
+                    if (employeeNames[employeeIndex].equals(targetEmployeeName)) {
+                        employeeNames[employeeIndex] = "Updated";
                     }
                 }
 
-                BufferedWriter w = new BufferedWriter(
-                    new FileWriter("employees.txt")
-                );
-
-                w.write(String.join(",", e));
-                w.close();
-
-            } catch (Exception e) {
+                writeEmployees(employeeNames);
             }
 
             System.out.println("Data Updated.");
 
-        } else if (commandLineArguments[0].contains("d")) {
+        } else if (command.contains("d")) {
             System.out.println("Loading data ...");
 
-            try {
-                BufferedReader r = new BufferedReader(
-                    new InputStreamReader(
-                        new FileInputStream("employees.txt")
-                    )
-                );
+            String[] employeeNames = readEmployees();
 
-                String l = r.readLine();
-                String e[] = l.split(",");
-                String n = commandLineArguments[0].substring(1);
+            if (employeeNames != null) {
+                String targetEmployeeName = command.substring(1);
 
-                List<String> list = new ArrayList<>(Arrays.asList(e));
-                list.remove(n);
+                List<String> employeeList =
+                    new ArrayList<>(Arrays.asList(employeeNames));
 
-                BufferedWriter w = new BufferedWriter(
-                    new FileWriter("employees.txt")
-                );
+                employeeList.remove(targetEmployeeName);
 
-                w.write(String.join(",", list));
-                w.close();
-
-            } catch (Exception e) {
+                writeEmployees(employeeList.toArray(new String[0]));
             }
 
             System.out.println("Data Deleted.");
+        }
+    }
+
+    // Reads employee names from the file.
+    private static String[] readEmployees() {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(
+                    new FileInputStream("employees.txt")
+                ))) {
+
+            String employeeLine = reader.readLine();
+
+            if (employeeLine == null || employeeLine.isEmpty()) {
+                return new String[0];
+            }
+
+            return employeeLine.split(",");
+
+        } catch (IOException exception) {
+            System.out.println("Error reading employee file.");
+            return null;
+        }
+    }
+
+    // Writes employee names to the file.
+    private static boolean writeEmployees(String[] employeeNames) {
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter("employees.txt"))) {
+
+            writer.write(String.join(",", employeeNames));
+            return true;
+
+        } catch (IOException exception) {
+            System.out.println("Error writing employee file.");
+            return false;
+        }
+    }
+
+    // Adds a new employee name at the end of the file.
+    private static boolean appendEmployee(String employeeName) {
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter("employees.txt", true))) {
+
+            writer.write(", " + employeeName);
+            return true;
+
+        } catch (IOException exception) {
+            System.out.println("Error adding employee.");
+            return false;
         }
     }
 }
