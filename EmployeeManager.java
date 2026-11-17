@@ -8,6 +8,12 @@ public class EmployeeManager {
 
     public static void main(String[] args) {
 
+        if (args.length != 1) {
+            System.out.println("Error: Exactly one argument is required.");
+            System.out.println("Usage: java EmployeeManager <l|s|+Name|?Name|c|uName>");
+            return;
+        }
+
         // Check arguments
         if (args[0].equals("l")) {
             System.out.println("Loading data ...");
