@@ -6,30 +6,30 @@ import java.util.*;
 
 public class EmployeeManager {
 
-    public static void main(String[] args) {
+    public static void main(String[] commandLineArguments) {
 
-        if (args.length != 1) {
+        if (commandLineArguments.length != 1) {
             System.out.println("Error: Exactly one argument is required.");
             System.out.println("Usage: java EmployeeManager <l|s|+Name|?Name|c|uName>");
             return;
         }
 
         // Check arguments
-        if (args[0].equals("l")) {
+        if (commandLineArguments[0].equals("l")) {
             System.out.println("Loading data ...");
 
             try {
-                BufferedReader r = new BufferedReader(
+                BufferedReader reader = new BufferedReader(
                     new InputStreamReader(
                         new FileInputStream("employees.txt")
                     )
                 );
 
-                String l = r.readLine();
-                String e[] = l.split(",");
+                String employeeLine = reader.readLine();
+                String employeeNames[] = employeeLine.split(",");
 
-                for (String emp : e) {
-                    System.out.println(emp);
+                for (String employeeName : employeeNames) {
+                    System.out.println(employeeName);
                 }
 
             } catch (Exception e) {
@@ -37,7 +37,7 @@ public class EmployeeManager {
 
             System.out.println("Data Loaded.");
 
-        } else if (args[0].equals("s")) {
+        } else if (commandLineArguments[0].equals("s")) {
             System.out.println("Loading data ...");
 
             try {
@@ -51,34 +51,34 @@ public class EmployeeManager {
                 System.out.println(l);
 
                 String e[] = l.split(",");
-                Random rand = new Random();
-                int idx = rand.nextInt(e.length);
+                Random randomgenerator = new Random();
+                int randomIndex = randomgenerator.nextInt(e.length);
 
-                System.out.println(e[idx]);
+                System.out.println(e[randomIndex]);
 
             } catch (Exception e) {
             }
 
             System.out.println("Data Loaded.");
 
-        } else if (args[0].contains("+")) {
+        } else if (commandLineArguments[0].contains("+")) {
             System.out.println("Loading data ...");
 
             try {
-                BufferedWriter w = new BufferedWriter(
+                BufferedWriter writer = new BufferedWriter(
                     new FileWriter("employees.txt", true)
                 );
 
-                String n = args[0].substring(1);
-                w.write(", " + n);
-                w.close();
+                String n = commandLineArguments[0].substring(1);
+                writer.write(", " + n);
+                writer.close();
 
             } catch (Exception e) {
             }
 
             System.out.println("Data Loaded.");
 
-        } else if (args[0].contains("?")) {
+        } else if (commandLineArguments[0].contains("?")) {
             System.out.println("Loading data ...");
 
             try {
@@ -91,10 +91,10 @@ public class EmployeeManager {
                 String l = r.readLine();
                 String e[] = l.split(",");
                 boolean found = false;
-                String s = args[0].substring(1);
+                String searchName = commandLineArguments[0].substring(1);
 
-                for (int i = 0; i < e.length && !found; i++) {
-                    if (e[i].equals(s)) {
+                for (int employeeIndex = 0; employeeIndex < e.length && !found; employeeIndex++) {
+                    if (e[employeeIndex].equals(searchName)) {
                         System.out.println("Employee found!");
                         found = true;
                     }
@@ -105,7 +105,7 @@ public class EmployeeManager {
 
             System.out.println("Data Loaded.");
 
-        } else if (args[0].contains("c")) {
+        } else if (commandLineArguments[0].contains("c")) {
             System.out.println("Loading data ...");
 
             try {
@@ -120,8 +120,8 @@ public class EmployeeManager {
                 boolean inWord = false;
                 int count = 0;
 
-                for (char c : chars) {
-                    if (c == ' ') {
+                for (char character : chars) {
+                    if (character == ' ') {
                         if (!inWord) {
                             count++;
                             inWord = true;
@@ -140,7 +140,7 @@ public class EmployeeManager {
 
             System.out.println("Data Loaded.");
 
-        } else if (args[0].contains("u")) {
+        } else if (commandLineArguments[0].contains("u")) {
             System.out.println("Loading data ...");
 
             try {
@@ -152,10 +152,10 @@ public class EmployeeManager {
 
                 String l = r.readLine();
                 String e[] = l.split(",");
-                String n = args[0].substring(1);
+                String employeeName = commandLineArguments[0].substring(1);
 
                 for (int i = 0; i < e.length; i++) {
-                    if (e[i].equals(n)) {
+                    if (e[i].equals(employeeName)) {
                         e[i] = "Updated";
                     }
                 }
@@ -172,7 +172,7 @@ public class EmployeeManager {
 
             System.out.println("Data Updated.");
 
-        } else if (args[0].contains("d")) {
+        } else if (commandLineArguments[0].contains("d")) {
             System.out.println("Loading data ...");
 
             try {
@@ -184,7 +184,7 @@ public class EmployeeManager {
 
                 String l = r.readLine();
                 String e[] = l.split(",");
-                String n = args[0].substring(1);
+                String n = commandLineArguments[0].substring(1);
 
                 List<String> list = new ArrayList<>(Arrays.asList(e));
                 list.remove(n);
